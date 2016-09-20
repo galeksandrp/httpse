@@ -1,7 +1,9 @@
 #!/bin/bash
 
 # Step 1: Find all subdomains w/ false-positives
-python2.7 Sublist3r/sublist3r.py -d $1 > cd1.txt
+python2.7 Sublist3r/sublist3r.py -d $1 > cd1.tmp.txt
+tail -n +23 cd1.tmp.txt | sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[mGK]//g" > cd1.txt
+rm cd1.tmp.txt
 
 # Step 2: Sort out false positives
 while read LINE; do
