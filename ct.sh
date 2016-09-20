@@ -17,3 +17,6 @@ rm cd3.tmp.txt
 
 # Step 3: Compile ruleset
 python3 p1.py $1
+
+# Optional: clean, comment out if debugging
+rm cd1.txt cd2.txt cd3.txt
