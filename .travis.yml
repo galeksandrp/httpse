@@ -12,6 +12,10 @@ addons:
     - sqlite3
     - libcurl4-openssl-dev
     - libssl-dev
+before_install:
+  - git config --global user.email 'galeksandrp@gmail.com'
+  - git config --global user.name 'Alexander Georgievskiy'
+  - echo -e "machine github.com\nlogin galeksandrp\npassword $GITHUB_TOKEN" >> ~/.netrc
 install:
   - wget https://github.com/galeksandrp/https-everywhere/archive/check-sublist3r.tar.gz -O - | tar xz
   - mv https-everywhere-check-sublist3r ~/workspace
