@@ -33,7 +33,7 @@ script:
   - ~/workspace/generate.sh $TRAVIS_BRANCH
 deploy:
   provider: script
-  script: git add $TRAVIS_BUILD_DIR/src/chrome/content/rules/$TRAVIS_BRANCH.xml && git commit -m TRAVIS_BRANCH && git push origin $TRAVIS_BRANCH
+  script: git add $TRAVIS_BUILD_DIR/src/chrome/content/rules/$TRAVIS_BRANCH.xml && git commit -m TRAVIS_BRANCH && git push origin HEAD:$TRAVIS_BRANCH-auto
 branches:
   except:
     - master
