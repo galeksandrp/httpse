@@ -3,19 +3,19 @@ addons:
     packages:
     - python-requests
     - python-dnspython
-    - python-argparse
 install:
-  - wget https://github.com/galeksandrp/https-everywhere/archive/check-sublist3r.tar.gz | tar xz -C~ https-everywhere-check-sublist3r
-  - mv ~/https-everywhere-check-sublist3r ~/workspace
+  - wget https://github.com/galeksandrp/https-everywhere/archive/check-sublist3r.tar.gz -O - | tar xz -C~/workspace https-everywhere-check-sublist3r
+  - pip install argparse
+  - wget https://github.com/aboul3la/Sublist3r/archive/master.tar.gz -O | tar xz --strip=1 -C~/Sublist3r Sublist3r-master
   - git remote add upstream https://github.com/EFForg/https-everywhere.git
   - git fetch upstream
   - git checkout upstream/master
   - pip install --no-allow-insecure --no-allow-external -r requirements.txt
   - pip install -r test/rules/requirements.txt
   - pip install -r test/chromium/requirements.txt
-  - wget https://github.com/github/hub/releases/download/v2.2.8/hub-linux-amd64-2.2.8.tgz | tar xz --strip=1 -C~ hub-linux-amd64-2.2.8
+  - wget https://github.com/github/hub/releases/download/v2.2.8/hub-linux-amd64-2.2.8.tgz -O - | tar xz --strip=1 -C~ hub-linux-amd64-2.2.8
   - export PATH=~/bin:$PATH
-  - chmod +x ~/workspace/*.sh
+  - chmod +x ~/Sublist3r/sublist3r.py ~/workspace/*.sh
 script:
   - cd src/chrome/content/rules
   - ~/workspace/generate.sh $TRAVIS_BRANCH
