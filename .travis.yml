@@ -38,7 +38,7 @@ before_deploy:
 deploy:
   provider: script
   script: git push origin HEAD:$DOMAIN
-env
+env:
 - DOMAIN=${TRAVIS_BRANCH::${#TRAVIS_BRANCH}-5}
 branches:
   except:
