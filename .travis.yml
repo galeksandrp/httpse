@@ -33,8 +33,10 @@ script:
   - cd src/chrome/content/rules
   - ~/workspace/generate.sh $DOMAIN
 before_deploy:
-- git checkout --orphan $DOMAIN
 - git add $TRAVIS_BUILD_DIR/src/chrome/content/rules/$DOMAIN.xml
+- git checkout master
+- git branch -D $DOMAIN
+- git checkout --orphan $DOMAIN
 - git commit -m DOMAIN
 deploy:
   provider: script
