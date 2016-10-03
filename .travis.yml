@@ -30,14 +30,16 @@ install:
   - chmod +x ~/workspace/Sublist3r/sublist3r.py ~/workspace/*.sh
 script:
   - cd src/chrome/content/rules
-  - ~/workspace/generate.sh $TRAVIS_BRANCH
+  - ~/workspace/generate.sh $DOMAIN
 before_deploy:
-- git checkout --orphan $TRAVIS_BRANCH-auto
-- git add $TRAVIS_BUILD_DIR/src/chrome/content/rules/$TRAVIS_BRANCH.xml
-- git commit -m TRAVIS_BRANCH
+- git checkout --orphan $DOMAIN
+- git add $TRAVIS_BUILD_DIR/src/chrome/content/rules/$DOMAIN.xml
+- git commit -m DOMAIN
 deploy:
   provider: script
-  script: git push origin HEAD:$TRAVIS_BRANCH-auto
+  script: git push origin HEAD:$DOMAIN
+env
+- DOMAIN=${TRAVIS_BRANCH::${#TRAVIS_BRANCH}-5}
 branches:
   except:
     - master
