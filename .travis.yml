@@ -20,7 +20,7 @@ install:
   - wget https://github.com/aboul3la/Sublist3r/archive/master.tar.gz -O - | tar xz
   - mv Sublist3r-master ~/workspace/Sublist3r
   - git remote add upstream https://github.com/EFForg/https-everywhere.git
-  - git fetch upstream master
+  - git fetch --depth=1 upstream master
   - git checkout -b master upstream/master
   - pip install --no-allow-insecure --no-allow-external -r requirements.txt
   - pip install -r test/rules/requirements.txt
@@ -38,6 +38,8 @@ before_deploy:
 deploy:
   provider: script
   script: git push origin HEAD:$DOMAIN
+  on:
+    all_branches: true
 env:
 - DOMAIN=${TRAVIS_BRANCH::${#TRAVIS_BRANCH}-5}
 branches:
