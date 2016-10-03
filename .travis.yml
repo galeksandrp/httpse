@@ -41,6 +41,7 @@ before_deploy:
 - git commit -m $DOMAIN
 - git checkout --orphan $DOMAIN-pr
 - git reset --hard
+- cd $TRAVIS_BUILD_DIR
 - git cherry-pick $DOMAIN
 deploy:
   provider: script
