@@ -7,20 +7,17 @@ addons:
     - libxml2-dev
     - libxml2-utils
     - libxslt1-dev
-    - python-dev
     - zip
     - sqlite3
-    - python-pip
     - libcurl4-openssl-dev
     - libssl-dev
-    - git
 install:
   - wget https://github.com/galeksandrp/https-everywhere/archive/check-sublist3r.tar.gz -O - | tar xz -C ~
   - mv ~/https-everywhere-check-sublist3r ~/workspace
   - pip install requests
   - pip install dnspython
   - pip install argparse
-  - wget https://github.com/aboul3la/Sublist3r/archive/master.tar.gz -O | tar xz -C ~
+  - wget https://github.com/aboul3la/Sublist3r/archive/master.tar.gz -O - | tar xz -C ~
   - mv ~/Sublist3r-master ~/Sublist3r
   - git remote add upstream https://github.com/EFForg/https-everywhere.git
   - git fetch upstream
