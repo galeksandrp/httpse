@@ -2,10 +2,10 @@ addons:
   apt:
     packages:
     - python-requests
-    - python-dnspython
+    - python-argparse
 install:
-  - wget https://github.com/galeksandrp/https-everywhere/archive/check-sublist3r.tar.gz -O - | tar xz -C~/workspace https-everywhere-check-sublist3r
-  - pip install argparse
+  - wget https://github.com/galeksandrp/https-everywhere/archive/check-sublist3r.tar.gz -O - | tar xz --strip=1 -C~/workspace https-everywhere-check-sublist3r
+  - pip install dnspython
   - wget https://github.com/aboul3la/Sublist3r/archive/master.tar.gz -O | tar xz --strip=1 -C~/Sublist3r Sublist3r-master
   - git remote add upstream https://github.com/EFForg/https-everywhere.git
   - git fetch upstream
