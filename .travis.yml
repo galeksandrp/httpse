@@ -12,16 +12,16 @@ addons:
     - libcurl4-openssl-dev
     - libssl-dev
 install:
-  - wget https://github.com/galeksandrp/https-everywhere/archive/check-sublist3r.tar.gz -O - | tar xz -C ~
-  - mv ~/https-everywhere-check-sublist3r ~/workspace
+  - wget https://github.com/galeksandrp/https-everywhere/archive/check-sublist3r.tar.gz -O - | tar xz
+  - mv https-everywhere-check-sublist3r ~/workspace
   - pip install requests
   - pip install dnspython
   - pip install argparse
-  - wget https://github.com/aboul3la/Sublist3r/archive/master.tar.gz -O - | tar xz -C ~
-  - mv ~/Sublist3r-master ~/workspace/Sublist3r
+  - wget https://github.com/aboul3la/Sublist3r/archive/master.tar.gz -O - | tar xz
+  - mv Sublist3r-master ~/workspace/Sublist3r
   - git remote add upstream https://github.com/EFForg/https-everywhere.git
-  - git fetch upstream
-  - git checkout upstream/master
+  - git fetch upstream master
+  - git checkout -b master upstream/master
   - pip install --no-allow-insecure --no-allow-external -r requirements.txt
   - pip install -r test/rules/requirements.txt
   - pip install -r test/chromium/requirements.txt
@@ -31,9 +31,13 @@ install:
 script:
   - cd src/chrome/content/rules
   - ~/workspace/generate.sh $TRAVIS_BRANCH
+before_deploy:
+- git checkout --orphan $TRAVIS_BRANCH-auto
+- git add $TRAVIS_BUILD_DIR/src/chrome/content/rules/$TRAVIS_BRANCH.xml
+- git commit -m TRAVIS_BRANCH
 deploy:
   provider: script
-  script: git add $TRAVIS_BUILD_DIR/src/chrome/content/rules/$TRAVIS_BRANCH.xml && git commit -m TRAVIS_BRANCH && git push origin HEAD:$TRAVIS_BRANCH-auto
+  script: git push origin HEAD:$TRAVIS_BRANCH-auto
 branches:
   except:
     - master
