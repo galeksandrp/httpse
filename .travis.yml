@@ -1,3 +1,6 @@
+language: python
+python:
+  - "2.7"
 addons:
   apt:
     packages:
@@ -11,20 +14,20 @@ addons:
     - libcurl4-openssl-dev
     - libssl-dev
     - git
-    - python-requests
-    - python-argparse
 install:
   - wget https://github.com/galeksandrp/https-everywhere/archive/check-sublist3r.tar.gz -O - | tar xz -C ~
   - mv ~/https-everywhere-check-sublist3r ~/workspace
+  - pip install requests
   - pip install dnspython
+  - pip install argparse
   - wget https://github.com/aboul3la/Sublist3r/archive/master.tar.gz -O | tar xz -C ~
   - mv ~/Sublist3r-master ~/Sublist3r
   - git remote add upstream https://github.com/EFForg/https-everywhere.git
   - git fetch upstream
   - git checkout upstream/master
-  - pip install --no-allow-insecure --no-allow-external -r requirements.txt
-  - pip install -r test/rules/requirements.txt
-  - pip install -r test/chromium/requirements.txt
+  - pip install --user --no-allow-insecure --no-allow-external -r requirements.txt
+  - pip install --user -r test/rules/requirements.txt
+  - pip install --user -r test/chromium/requirements.txt
   - wget https://github.com/github/hub/releases/download/v2.2.8/hub-linux-amd64-2.2.8.tgz -O - | tar xz --strip=1 -C ~ hub-linux-amd64-2.2.8
   - export PATH=~/bin:$PATH
   - chmod +x ~/workspace/Sublist3r/sublist3r.py ~/workspace/*.sh
