@@ -39,11 +39,6 @@ script:
 before_deploy:
 - git add $TRAVIS_BUILD_DIR/src/chrome/content/rules/$DOMAIN.xml
 - git commit -m $DOMAIN
-- git checkout --orphan $DOMAIN-pr
-- cd $TRAVIS_BUILD_DIR
-- git reset --hard
-- git clean -fd
-- git cherry-pick $DOMAIN
 deploy:
   provider: script
   script: git push origin HEAD:$DOMAIN-pr
