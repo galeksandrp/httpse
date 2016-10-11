@@ -41,7 +41,7 @@ before_deploy:
 - git commit -m $DOMAIN
 deploy:
   provider: script
-  script: git push origin HEAD:$DOMAIN-pr
+  script: git push origin HEAD:$DOMAIN-pr -f
   on:
     all_branches: true
 env:
