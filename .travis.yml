@@ -13,9 +13,11 @@ addons:
     - libcurl4-openssl-dev
     - libssl-dev
 before_install:
-  - git config --global user.email 'galeksandrp@gmail.com'
-  - git config --global user.name 'Alexander Georgievskiy'
-  - echo -e "machine github.com\nlogin galeksandrp\npassword $GITHUB_TOKEN" >> ~/.netrc
+  - git config --global user.email $GIT_EMAIL
+  - git config --global user.name $GIT_NAME
+  - echo -e "machine github.com\nlogin $GITHUB_NAME\npassword $GITHUB_TOKEN" >> ~/.netrc
+  - mkdir ~/.config || true
+  - 'echo -e "---\ngithub.com:\n- oauth_token: $GITHUB_TOKEN\n  user: $GITHUB_NAME" >> ~/.config/hub'
 install:
   - wget https://github.com/galeksandrp/https-everywhere/archive/check-sublist3r.tar.gz -O - | tar xz
   - mv https-everywhere-check-sublist3r ~/workspace
@@ -25,7 +27,7 @@ install:
   - wget https://github.com/aboul3la/Sublist3r/archive/master.tar.gz -O - | tar xz
   - mv Sublist3r-master ~/workspace/Sublist3r
   - git remote add upstream https://github.com/EFForg/https-everywhere.git
-  - git fetch --depth=1 upstream master
+  - git fetch upstream master
   - git checkout -b master upstream/master
   - pip install --no-allow-insecure --no-allow-external -r requirements.txt
   - pip install -r test/rules/requirements.txt
@@ -39,14 +41,10 @@ script:
 before_deploy:
 - git add $TRAVIS_BUILD_DIR/src/chrome/content/rules/$DOMAIN.xml
 - git commit -m $DOMAIN
-- git checkout --orphan $DOMAIN-pr
-- cd $TRAVIS_BUILD_DIR
-- git rm --cached -r . > /dev/null
-- git clean -fd
-- git cherry-pick $DOMAIN
+- git push origin $DOMAIN
 deploy:
   provider: script
-  script: git push origin $DOMAIN-pr
+  script: hub pull-request -m $DOMAIN
   on:
     all_branches: true
 env:
