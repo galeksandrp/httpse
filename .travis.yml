@@ -38,11 +38,10 @@ install:
 script:
   - cd src/chrome/content/rules
   - ~/workspace/generate.sh $DOMAIN
-before_deploy:
+on_success:
 - git add $TRAVIS_BUILD_DIR/src/chrome/content/rules/$DOMAIN.xml
 - git commit -m $DOMAIN
 - git push origin $DOMAIN
-on_success:
 - hub pull-request -m $DOMAIN
 env:
 - DOMAIN=${TRAVIS_BRANCH::${#TRAVIS_BRANCH}-5}
