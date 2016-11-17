@@ -42,11 +42,8 @@ before_deploy:
 - git add $TRAVIS_BUILD_DIR/src/chrome/content/rules/$DOMAIN.xml
 - git commit -m $DOMAIN
 - git push origin $DOMAIN
-deploy:
-  provider: script
-  script: hub pull-request -m $DOMAIN
-  on:
-    all_branches: true
+on_success:
+- hub pull-request -m $DOMAIN
 env:
 - DOMAIN=${TRAVIS_BRANCH::${#TRAVIS_BRANCH}-5}
 notifications:
