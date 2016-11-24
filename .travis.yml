@@ -41,7 +41,9 @@ script:
   - git add $TRAVIS_BUILD_DIR/src/chrome/content/rules/$DOMAIN.xml
   - git commit -m $DOMAIN
   - git push origin $DOMAIN
-  - hub pull-request -m $DOMAIN
+  - git branch || true
+  - git describe || true
+  - git log -10 || true
 env:
 - DOMAIN=${TRAVIS_BRANCH::${#TRAVIS_BRANCH}-5}
 notifications:
