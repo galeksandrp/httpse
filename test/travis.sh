@@ -18,7 +18,7 @@ chmod +x ~/workspace/Sublist3r/sublist3r.py ~/workspace/*.sh
 
 cd src/chrome/content/rules
 ~/workspace/generate.sh $DOMAIN
-git add $TRAVIS_BUILD_DIR/src/chrome/content/rules/$DOMAIN.xml
+git add $DOMAIN.xml
 git commit -m $DOMAIN
 git push -u origin $DOMAIN
 hub pull-request -h $GITHUB_OWNER:$DOMAIN -m $DOMAIN
