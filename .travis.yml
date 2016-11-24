@@ -17,7 +17,6 @@ before_install:
   - git config --global user.name $GIT_NAME
   - echo -e "machine github.com\nlogin $GITHUB_NAME\npassword $GITHUB_TOKEN" >> ~/.netrc
   - mkdir ~/.config || true
-  - 'echo -e "---\ngithub.com:\n- oauth_token: $GITHUB_TOKEN\n  user: $GITHUB_NAME" >> ~/.config/hub'
 install:
   - wget https://github.com/galeksandrp/https-everywhere/archive/check-sublist3r.tar.gz -O - | tar xz
   - mv https-everywhere-check-sublist3r ~/workspace
