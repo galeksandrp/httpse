@@ -43,6 +43,7 @@ script:
   - git branch || true
   - git describe || true
   - git log -10 || true
+  - hub pull-request -m $DOMAIN
 env:
 - DOMAIN=${TRAVIS_BRANCH::${#TRAVIS_BRANCH}-5}
 notifications:
