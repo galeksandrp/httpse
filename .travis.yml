@@ -1,55 +1,8 @@
-language: python
-cache: pip
-python:
-  - "2.7"
-addons:
-  apt:
-    packages:
-    - libxml2-dev
-    - libxml2-utils
-    - libxslt1-dev
-    - zip
-    - sqlite3
-    - libcurl4-openssl-dev
-    - libssl-dev
-before_install:
-  - git config --global user.email $GIT_EMAIL
-  - git config --global user.name $GIT_NAME
-  - echo -e "machine github.com\nlogin $GITHUB_NAME\npassword $GITHUB_TOKEN" >> ~/.netrc
-  - mkdir ~/.config || true
-install:
-  - wget https://github.com/galeksandrp/https-everywhere/archive/check-sublist3r.tar.gz -O - | tar xz
-  - mv https-everywhere-check-sublist3r ~/workspace
-  - pip install requests
-  - pip install dnspython
-  - pip install argparse
-  - wget https://github.com/aboul3la/Sublist3r/archive/master.tar.gz -O - | tar xz
-  - mv Sublist3r-master ~/workspace/Sublist3r
-  - git remote add upstream https://github.com/EFForg/https-everywhere.git
-  - git fetch upstream master
-  - git checkout -b master upstream/master
-  - pip install --no-allow-insecure --no-allow-external -r requirements.txt
-  - pip install -r test/rules/requirements.txt
-  - pip install -r test/chromium/requirements.txt
-  - wget https://github.com/github/hub/releases/download/v2.2.8/hub-linux-amd64-2.2.8.tgz -O - | tar xz --strip=1 -C ~ hub-linux-amd64-2.2.8
-  - export PATH=~/bin:$PATH
-  - chmod +x ~/workspace/Sublist3r/sublist3r.py ~/workspace/*.sh
+sudo: required
+language: generic
+services:
+  - docker
 script:
-  - cd src/chrome/content/rules
-  - ~/workspace/generate.sh $DOMAIN
-  - git add $TRAVIS_BUILD_DIR/src/chrome/content/rules/$DOMAIN.xml
-  - git commit -m $DOMAIN
-  - git push origin $DOMAIN
-  - git branch || true
-  - git describe || true
-  - git log -10 || true
-  - echo $PUBLIC_KEY >> ~/.ssh/authorized_keys
-  - wget https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip
-  - unzip ngrok-stable-linux-amd64.zip
-  - ./ngrok authtoken $NG
-  - ./ngrok tcp 22 > /dev/null &
-  - watch -n 540 echo 'LOL'
-env:
-- DOMAIN=${TRAVIS_BRANCH::${#TRAVIS_BRANCH}-5}
+  - docker run --rm -ti -e "GIT_EMAIL=$GIT_EMAIL" -e "GIT_NAME=$GIT_NAME" -e "GITHUB_NAME=$GITHUB_NAME" -e "GITHUB_TOKEN=$GITHUB_TOKEN" -e "GITHUB_OWNER=$GITHUB_OWNER" -e "TRAVIS_BRANCH=$TRAVIS_BRANCH" galeksandrp/travistest:docker-httpse bash -c "test/rules.sh"
 notifications:
   email: false
