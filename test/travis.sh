@@ -10,6 +10,7 @@ mv https-everywhere-check-sublist3r ~/workspace
 wget https://github.com/aboul3la/Sublist3r/archive/master.tar.gz -O - | tar xz
 mv Sublist3r-master ~/workspace/Sublist3r
 git remote add upstream https://github.com/EFForg/https-everywhere.git
+git remote set-url origin https://github.com/$GITHUB_NAME/https-everywhere.git
 git fetch upstream master
 git checkout -b master upstream/master
 wget https://github.com/github/hub/releases/download/v2.2.8/hub-linux-amd64-2.2.8.tgz -O - | tar xz --strip=1 -C ~ hub-linux-amd64-2.2.8
@@ -21,4 +22,4 @@ cd src/chrome/content/rules
 git add $DOMAIN.xml
 git commit -m $DOMAIN
 git push -u origin $DOMAIN
-hub pull-request -h $GITHUB_OWNER:$DOMAIN -m $DOMAIN
+hub pull-request -m $DOMAIN
