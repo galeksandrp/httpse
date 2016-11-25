@@ -22,4 +22,3 @@ cd src/chrome/content/rules
 git add $DOMAIN.xml
 git commit -m $DOMAIN
 git push -u origin $DOMAIN
-hub pull-request -h $GITHUB_NAME:$DOMAIN -m $DOMAIN
