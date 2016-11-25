@@ -4,5 +4,8 @@ services:
   - docker
 script:
   - docker run --rm -ti -v $(pwd):/opt -e "GIT_EMAIL=$GIT_EMAIL" -e "GIT_NAME=$GIT_NAME" -e "GITHUB_NAME=$GITHUB_NAME" -e "GITHUB_TOKEN=$GITHUB_TOKEN" -e "GITHUB_OWNER=$GITHUB_OWNER" -e "TRAVIS_BRANCH=$TRAVIS_BRANCH" galeksandrp/https-everywhere:docker-httpse bash -c "test/travis.sh"
+branches:
+  except:
+  - template
 notifications:
   email: false
