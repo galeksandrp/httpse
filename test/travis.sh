@@ -16,12 +16,12 @@ mv Sublist3r-master ~/workspace/Sublist3r
 git remote add upstream https://github.com/EFForg/https-everywhere.git
 git remote set-url origin https://github.com/$GITHUB_NAME/https-everywhere.git
 git fetch upstream master
-git checkout -b master upstream/master
+git checkout -b $DOMAIN upstream/master
 wget https://github.com/github/hub/releases/download/v2.2.8/hub-linux-amd64-2.2.8.tgz -O - | tar xz --strip=1 -C ~ hub-linux-amd64-2.2.8
 chmod +x ~/workspace/Sublist3r/sublist3r.py ~/workspace/*.sh
 
 cd src/chrome/content/rules
-~/workspace/generate.sh $DOMAIN
-git add $DOMAIN.xml
+FILE=$(grep "<target host=\"$DOMAIN\"" -l *.xml) && ~/workspace/generate.sh $DOMAIN $FILE || ~/workspace/generate.sh $DOMAIN
+git add .
 git commit -m "$DOMAIN fix $TRAVIS_REPO_SLUG#$ISSUE"
 git push -u origin $DOMAIN
