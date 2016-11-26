@@ -1,5 +1,5 @@
-export DOMAIN=$(echo $TRAVIS_BRANCH | cut -d '-' -f 1)
-export ISSUE=$(echo $TRAVIS_BRANCH | cut -d '-' -f 2)
+export DOMAIN=$(echo $TRAVIS_BRANCH | cut -d '=' -f 1)
+export ISSUE=$(echo $TRAVIS_BRANCH | cut -d '=' -f 2)
 export GITHUB_NAME=$(echo $TRAVIS_REPO_SLUG | cut -d '/' -f 1)
 export PATH=~/bin:$PATH
 USER=$(curl $(curl https://api.github.com/repos/$TRAVIS_REPO_SLUG/issues/$ISSUE | jq -r '.user.url'))

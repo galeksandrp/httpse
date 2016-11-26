@@ -8,7 +8,6 @@ script:
 branches:
   except:
   - template
-  - template-2
-  - template-manual
+  - /^template-.*$/
 notifications:
   email: false
