@@ -26,8 +26,11 @@ chmod +x ~/workspace/Sublist3r/sublist3r.py ~/workspace/*.sh
 
 cd src/chrome/content/rules
 FILE=$(grep "<target host=\"$DOMAIN\"" -l *.xml) || FILE=$DOMAIN.xml
-~/workspace/generate.sh $DOMAIN $FILE || exit 1
-git add $FILE
+~/workspace/generate.sh $DOMAIN "$FILE" || exit 1
+if [ $(xmllint --xpath 'count(//target)' "$FILE") -eq 0 ]; then
+  exit 1
+fi
+git add "$FILE"
 git commit -m "$DOMAIN fix $TRAVIS_REPO_SLUG#$ISSUE"
 git push $FORCE -u fork $DOMAIN
 echo $DOMAIN > ~/pr.txt
