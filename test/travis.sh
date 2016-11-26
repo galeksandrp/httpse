@@ -14,9 +14,11 @@ mv https-everywhere-check-sublist3r ~/workspace
 wget https://github.com/aboul3la/Sublist3r/archive/master.tar.gz -O - | tar xz
 mv Sublist3r-master ~/workspace/Sublist3r
 git remote add upstream https://github.com/EFForg/https-everywhere.git
-git remote set-url origin https://github.com/$GITHUB_NAME/https-everywhere.git
-git fetch upstream --depth=50 master
-git checkout -b $DOMAIN upstream/master
+git remote add fork https://github.com/$GITHUB_NAME/https-everywhere.git
+git fetch upstream master
+git fetch fork $DOMAIN || true
+git checkout -b $DOMAIN fork/$DOMAIN || git checkout -b $DOMAIN upstream/master
+ls test/fetch.sh || git rebase upstream/master && FORCE='-f'
 wget https://github.com/github/hub/releases/download/v2.2.8/hub-linux-amd64-2.2.8.tgz -O - | tar xz --strip=1 -C ~ hub-linux-amd64-2.2.8
 chmod +x ~/workspace/Sublist3r/sublist3r.py ~/workspace/*.sh
 
@@ -24,7 +26,7 @@ cd src/chrome/content/rules
 FILE=$(grep "<target host=\"$DOMAIN\"" -l *.xml) && ~/workspace/generate.sh $DOMAIN $FILE || ~/workspace/generate.sh $DOMAIN
 git add .
 git commit -m "$DOMAIN fix $TRAVIS_REPO_SLUG#$ISSUE"
-git push -u origin $DOMAIN
+git push $FORCE -u fork $DOMAIN
 echo $DOMAIN > ~/pr.txt
 echo '' >> ~/pr.txt
 echo Issue author: @$(echo $USER | jq -r '.login') >> ~/pr.txt
