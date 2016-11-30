@@ -28,4 +28,4 @@ git push -u origin $DOMAIN
 echo $DOMAIN > ~/pr.txt
 echo '' >> ~/pr.txt
 echo Issue author: @$(echo $USER | jq -r '.login') >> ~/pr.txt
-hub pull-request -h $GITHUB_NAME:$DOMAIN -F ~/pr.txt
+hub pull-request -h $GITHUB_NAME:$DOMAIN -b galeksandrp -F ~/pr.txt
