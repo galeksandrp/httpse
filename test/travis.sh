@@ -25,4 +25,7 @@ FILE=$(grep "<target host=\"$DOMAIN\"" -l *.xml) && ~/workspace/generate.sh $DOM
 git add .
 git commit -m "$DOMAIN fix $TRAVIS_REPO_SLUG#$ISSUE"
 git push -u origin $DOMAIN
-hub pull-request -h $GITHUB_NAME:$DOMAIN -m $DOMAIN
+echo $DOMAIN > ~/pr.txt
+echo '' >> ~/pr.txt
+echo Issue author: @$(echo $USER | jq -r '.login') >> ~/pr.txt
+hub pull-request -h $GITHUB_NAME:$DOMAIN -F ~/pr.txt
