@@ -4,10 +4,6 @@ services:
   - docker
 script:
   - travis_wait 120 sleep infinity &
-  - docker run --rm -ti -v $(pwd):/opt -e "GIT_EMAIL=$GIT_EMAIL" -e "GIT_NAME=$GIT_NAME" -e "GITHUB_NAME=$GITHUB_NAME" -e "GITHUB_TOKEN=$GITHUB_TOKEN" -e "TRAVIS_REPO_SLUG=$TRAVIS_REPO_SLUG" -e "TRAVIS_BRANCH=$TRAVIS_BRANCH" galeksandrp/https-everywhere:docker-httpse bash -c "test/travis.sh"
-branches:
-  except:
-  - template
-  - /^template-.*$/
+  - docker run --rm -ti -v $(pwd):/opt -e "GITHUB_NAME=$GITHUB_NAME" -e "GITHUB_TOKEN=$GITHUB_TOKEN" -e "DOMAIN=$DOMAIN" -e "ISSUE=$ISSUE" galeksandrp/https-everywhere:docker-httpse bash -c "test/travis.sh"
 notifications:
   email: false

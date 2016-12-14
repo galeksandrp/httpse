@@ -1,11 +1,9 @@
-export DOMAIN=$(echo $TRAVIS_BRANCH | cut -d '=' -f 1)
-export ISSUE=$(echo $TRAVIS_BRANCH | cut -d '=' -f 2)
-export GITHUB_NAME=$(echo $TRAVIS_REPO_SLUG | cut -d '/' -f 1)
 export PATH=~/bin:$PATH
-USER=$(curl $(curl https://api.github.com/repos/$TRAVIS_REPO_SLUG/issues/$ISSUE | jq -r '.user.url'))
+USER=$(curl -H "Authorization: token $GITHUB_TOKEN" 'https://api.github.com/user')
+#GITHUB_NAME=$(echo $USER | jq -r '.login')
 git config --global user.email $(echo $USER | jq -e '.email' > /dev/null && echo $USER | jq -r '.email' || echo $(echo $USER | jq -r '.login')@users.noreply.github.com)
 git config --global user.name "$(echo $USER | jq -e '.name' > /dev/null && echo $USER | jq -r '.name' || echo $USER | jq -r '.login')"
-echo -e "machine github.com\nlogin $GITHUB_NAME\npassword $GITHUB_TOKEN" >> ~/.netrc
+echo -e "machine github.com\nlogin $GITHUB_TOKEN\npassword x-oauth-basic" >> ~/.netrc
 mkdir ~/.config || true
 echo -e "---\ngithub.com:\n- oauth_token: $GITHUB_TOKEN\n  user: $GITHUB_NAME" >> ~/.config/hub
 
@@ -31,7 +29,7 @@ if [ $(xmllint --xpath 'count(//target)' "$FILE") -eq 0 ]; then
   exit 1
 fi
 git add "$FILE"
-git commit -m "$DOMAIN fix $TRAVIS_REPO_SLUG#$ISSUE"
+git commit -m $DOMAIN
 git push $FORCE -u fork $DOMAIN
 echo $DOMAIN > ~/pr.txt
 echo '' >> ~/pr.txt
