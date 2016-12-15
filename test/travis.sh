@@ -1,7 +1,10 @@
 export PATH=~/bin:$PATH
 USER=$(curl -H "Authorization: token $GITHUB_TOKEN" 'https://api.github.com/user')
 #GITHUB_NAME=$(echo $USER | jq -r '.login')
-git config --global user.email $(echo $USER | jq -e '.email' > /dev/null && echo $USER | jq -r '.email' || echo $(echo $USER | jq -r '.login')@users.noreply.github.com)
+useEmails(){
+  curl -H "Authorization: token $GITHUB_TOKEN" 'https://api.github.com/user/emails' | jq -r '.[]|select(.primary).email'
+}
+git config --global user.email $(echo $USER | jq -e '.email' > /dev/null && echo $USER | jq -r '.email' || useEmails || echo $(echo $USER | jq -r '.login')@users.noreply.github.com)
 git config --global user.name "$(echo $USER | jq -e '.name' > /dev/null && echo $USER | jq -r '.name' || echo $USER | jq -r '.login')"
 echo -e "machine github.com\nlogin $GITHUB_TOKEN\npassword x-oauth-basic" >> ~/.netrc
 mkdir ~/.config || true
