@@ -36,5 +36,11 @@ git commit -m $DOMAIN
 git push $FORCE -u fork $DOMAIN
 echo $DOMAIN > ~/pr.txt
 echo '' >> ~/pr.txt
-echo Issue author: @$(echo $USER | jq -r '.login') >> ~/pr.txt
-if [ $ISSUE -ne 2 ]; then hub pull-request -h $GITHUB_NAME:$DOMAIN -F ~/pr.txt; fi
+wrap(){
+  echo "[Mixed content scan](https://www.jitbit.com/sslcheck/#url=https://$DOMAIN) of domain and all found subdomains: \`Pages with unsecure content:\`"
+  echo '```xml'
+  cat ~/mixed.txt
+  echo '```'
+}
+[ -s ~/mixed.txt ] && echo "[Mixed content scan](https://www.jitbit.com/sslcheck/#url=https://$DOMAIN) of domain and all found subdomains: \`No issues found\`" >> ~/pr.txt || wrap >> ~/pr.txt
+if [ $ISSUE -eq 2 ]; then hub pull-request -b galeksandrp:master -h $GITHUB_NAME:$DOMAIN -F ~/pr.txt; else hub pull-request -h $GITHUB_NAME:$DOMAIN -F ~/pr.txt; fi
