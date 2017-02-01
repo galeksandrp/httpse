@@ -37,4 +37,4 @@ git push $FORCE -u fork $DOMAIN
 echo $DOMAIN > ~/pr.txt
 echo '' >> ~/pr.txt
 echo Issue author: @$(echo $USER | jq -r '.login') >> ~/pr.txt
-if [ $ISSUE -ne 2 ]; then hub pull-request -h $GITHUB_NAME:$DOMAIN -F ~/pr.txt; fi
+if [ $ISSUE -ne 2 ]; then hub pull-request -h $GITHUB_NAME:$DOMAIN -b EFForg:master -F ~/pr.txt; fi
