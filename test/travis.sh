@@ -18,7 +18,7 @@ git remote add fork https://github.com/$GITHUB_NAME/https-everywhere.git
 checkoutBranch(){
     git show fork/$DOMAIN:test/fetch.sh > /dev/null || (git fetch --unshallow fork $DOMAIN && git fetch upstream master)
     git checkout -b $DOMAIN fork/$DOMAIN
-    git show fork/$DOMAIN:test/fetch.sh > /dev/null || (git rebase upstream/master && FORCE='-f')
+    git show fork/$DOMAIN:test/fetch.sh > /dev/null || git rebase upstream/master
 }
 git fetch --depth=50 fork $DOMAIN && checkoutBranch || (git fetch --depth=50 upstream master && git checkout -b $DOMAIN upstream/master)
 wget https://github.com/github/hub/releases/download/v2.2.8/hub-linux-amd64-2.2.8.tgz -O - | tar xz --strip=1 -C ~ hub-linux-amd64-2.2.8
@@ -32,7 +32,7 @@ if [ $(xmllint --xpath 'count(//target)' "$FILE") -eq 0 ]; then
 fi
 git add "$FILE"
 git commit -m "$DOMAIN fix $TRAVIS_REPO_SLUG#$ISSUE"
-git push $FORCE -u fork $DOMAIN
+git push -f -u fork $DOMAIN
 echo $DOMAIN > ~/pr.txt
 echo '' >> ~/pr.txt
 echo Issue author: @$(echo $USER | jq -r '.login') >> ~/pr.txt
