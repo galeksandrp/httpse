@@ -12,7 +12,7 @@ echo -e "---\ngithub.com:\n- oauth_token: $GITHUB_TOKEN\n  user: $GITHUB_NAME" >
 
 wget https://github.com/galeksandrp/https-everywhere/archive/check-sublist3r.tar.gz -O - | tar xz
 mv https-everywhere-check-sublist3r ~/workspace
-wget https://github.com/aboul3la/Sublist3r/archive/master.tar.gz -O - | tar xz
+wget https://github.com/galeksandrp/Sublist3r/archive/nocheck.tar.gz -O - | tar xz
 mv Sublist3r-master ~/workspace/Sublist3r
 git remote add upstream https://github.com/EFForg/https-everywhere.git
 git remote add fork https://github.com/$GITHUB_NAME/https-everywhere.git
