@@ -1,0 +1,9 @@
+sudo: required
+language: generic
+services:
+  - docker
+script:
+  - test/travis.sh
+env:
+  - docker build -t httpse .
+  - docker run --rm -ti -v $(pwd):/opt httpse bash -c "python3 old-ruleset-generator.py -d arb.ru"
