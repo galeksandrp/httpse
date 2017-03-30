@@ -4,7 +4,12 @@ services:
   - docker
 script:
   - travis_wait 120 sleep infinity &
-  - docker run --rm -ti -v $(pwd):/opt -e "GIT_EMAIL=$GIT_EMAIL" -e "GIT_NAME=$GIT_NAME" -e "GITHUB_NAME=$GITHUB_NAME" -e "GITHUB_TOKEN=$GITHUB_TOKEN" -e "TRAVIS_REPO_SLUG=$TRAVIS_REPO_SLUG" -e "TRAVIS_BRANCH=$TRAVIS_BRANCH" galeksandrp/https-everywhere:docker-httpse bash -c "test/travis.sh"
+  - git remote add private https://gist.github.com/51893f7d0f8b16d6d8be25073131d4b6.git
+  - git fetch private master
+  - git rebase private/master
+  - git clone https://github.com/aboul3la/Sublist3r.git
+  - docker run --rm -ti -v $(pwd):/opt -e "DOMAIN=$DOMAIN" galeksandrp/https-everywhere:docker-httpse2 bash -c "chmod +x ct.sh && ./ct.sh $DOMAIN"
+  - docker run --rm -ti -v $(pwd):/opt -e "GITHUB_TOKEN=$GITHUB_TOKEN" -e "TRAVIS_REPO_SLUG=$TRAVIS_REPO_SLUG" -e "TRAVIS_BRANCH=$TRAVIS_BRANCH" -e "DOMAIN=$DOMAIN" galeksandrp/https-everywhere:docker-httpse2 bash -c "test/travis.sh"
 branches:
   except:
   - template
@@ -13,4 +18,5 @@ notifications:
   email: false
 env:
   global:
-    secure: Gyjz6q98Df5J/knDUlTi43kg0VbGl3ws1UGNFWN2zO/uSlwIJuVoVXOiH2h9aSKqxsCR8n1gpKRS3wXS2T5FXoe8WCQGQnx4x0XrNawF8MOB7qgVG4c/bNhiEyIiHsse4C9UGcCGX1/h4Kcbp01UOTE0J5nKpDIssMVOeYUx0VOr6XugcoOJ5YU4gvMCZTYFJ53v2dBXboIMMDpFDqHd9Qub1IOYgS2lnidaPx69Dg9J1WgeSVpsNIQ6k3wCu8Cy76j/eAzNEY2RhwJ+AZBJPrluLRCH7aXTpHIDO6/LKmVmE4DEK73Og1H36CK4SUFMnmYG2Og+HklBlg/WDGE0eIvy5XujGeCLgt1Ca15UigaKSlVpZR0Q2iDJGH7IqbPHDWWEla4XXRNGZCfZTMFnw3Oy67TJlHnJ9VLKj++lFJnGA6HCMg2WeCSkAnMOdSPx0dmkHgtEgjP3I/brww9wsEs7JhJbzawomVIzxohzVgJPHssSSb8Uwkdh/5WsZOcPBW95BhkX1r71j/KEixTM17igZ8M4NC/d3UfcmldLIc+1dXl/aA8tZQkE/bVZeD0dlOA0KzB9fBU+7z8XVwMxzv49oNCRZApiexf4psGQFJajBbEVrDvlqIILAeBV6anhNLy/PujXnmtq2ocH6f3Lp4f2JS31ZTSxKa6v+pcJNyo=
+    - secure: Gyjz6q98Df5J/knDUlTi43kg0VbGl3ws1UGNFWN2zO/uSlwIJuVoVXOiH2h9aSKqxsCR8n1gpKRS3wXS2T5FXoe8WCQGQnx4x0XrNawF8MOB7qgVG4c/bNhiEyIiHsse4C9UGcCGX1/h4Kcbp01UOTE0J5nKpDIssMVOeYUx0VOr6XugcoOJ5YU4gvMCZTYFJ53v2dBXboIMMDpFDqHd9Qub1IOYgS2lnidaPx69Dg9J1WgeSVpsNIQ6k3wCu8Cy76j/eAzNEY2RhwJ+AZBJPrluLRCH7aXTpHIDO6/LKmVmE4DEK73Og1H36CK4SUFMnmYG2Og+HklBlg/WDGE0eIvy5XujGeCLgt1Ca15UigaKSlVpZR0Q2iDJGH7IqbPHDWWEla4XXRNGZCfZTMFnw3Oy67TJlHnJ9VLKj++lFJnGA6HCMg2WeCSkAnMOdSPx0dmkHgtEgjP3I/brww9wsEs7JhJbzawomVIzxohzVgJPHssSSb8Uwkdh/5WsZOcPBW95BhkX1r71j/KEixTM17igZ8M4NC/d3UfcmldLIc+1dXl/aA8tZQkE/bVZeD0dlOA0KzB9fBU+7z8XVwMxzv49oNCRZApiexf4psGQFJajBbEVrDvlqIILAeBV6anhNLy/PujXnmtq2ocH6f3Lp4f2JS31ZTSxKa6v+pcJNyo=
+    - DOMAIN=$(echo $TRAVIS_BRANCH | cut -d '=' -f 1)
