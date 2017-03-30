@@ -12,6 +12,3 @@ ENV FIREFOX /firefox-latest/firefox/firefox
 WORKDIR /opt
 
 RUN apt-get update && apt-get install -y sudo libffi-dev python3-pip
-ADD setup.sh .
-RUN chmod +x setup.sh
-RUN ./setup.sh
