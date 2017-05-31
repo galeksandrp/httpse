@@ -15,6 +15,5 @@ script:
 branches:
   except:
   - template
-  - /^template-.*$/
 notifications:
   email: false
