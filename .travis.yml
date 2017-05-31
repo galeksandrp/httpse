@@ -4,6 +4,17 @@ services:
   - docker
 script:
   - travis_wait 120 sleep infinity &
-  - docker run --rm -ti -v $(pwd):/opt -e "GITHUB_NAME=$GITHUB_NAME" -e "GITHUB_TOKEN=$GITHUB_TOKEN" -e "DOMAIN=$DOMAIN" -e "ISSUE=$ISSUE" galeksandrp/https-everywhere:docker-httpse bash -c "test/travis.sh"
+  - git remote add private https://github.com/pgerber/https-everywhere.git
+  - git fetch private generate_ruleset
+  - git checkout private/generate_ruleset
+  - git checkout $TRAVIS_COMMIT -- test/travis.sh
+  - git clone https://github.com/aboul3la/Sublist3r.git
+  - docker run --rm -ti -v $(pwd):/opt -e "DOMAIN=$DOMAIN" galeksandrp/https-everywhere:docker-httpse2 bash -c "chmod +x Sublist3r/sublist3r.py && ./Sublist3r/sublist3r.py -d $DOMAIN -o hostlist.txt"
+  - docker run --rm -ti -v $(pwd):/opt -e "DOMAIN=$DOMAIN" galeksandrp/https-everywhere:docker-httpse2 bash -c "LC_ALL=en_US.UTF-8 ./utils/generate-ruleset.py -i hostlist.txt -o $DOMAIN.xml"
+  - docker run --rm -ti -v $(pwd):/opt -e "GITHUB_TOKEN=$GITHUB_TOKEN" -e "TRAVIS_REPO_SLUG=$TRAVIS_REPO_SLUG" -e "TRAVIS_BRANCH=$TRAVIS_BRANCH" -e "DOMAIN=$DOMAIN" galeksandrp/https-everywhere:docker-httpse2 bash -c "test/travis.sh"
+branches:
+  except:
+  - template
+  - /^template-.*$/
 notifications:
   email: false
