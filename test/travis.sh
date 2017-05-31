@@ -10,24 +10,20 @@ echo -e "machine github.com\nlogin $GITHUB_TOKEN\npassword x-oauth-basic" >> ~/.
 mkdir ~/.config || true
 echo -e "---\ngithub.com:\n- oauth_token: $GITHUB_TOKEN\n  user: $GITHUB_NAME" >> ~/.config/hub
 
-wget https://github.com/galeksandrp/https-everywhere/archive/check-sublist3r.tar.gz -O - | tar xz
-mv https-everywhere-check-sublist3r ~/workspace
-wget https://github.com/galeksandrp/Sublist3r/archive/nocheck.tar.gz -O - | tar xz
-mv Sublist3r-nocheck ~/workspace/Sublist3r
 git remote add upstream https://github.com/EFForg/https-everywhere.git
 git remote add fork https://github.com/$GITHUB_NAME/https-everywhere.git
+mv $DOMAIN.xml ~/$DOMAIN.xml
 checkoutBranch(){
     git show fork/$DOMAIN:test/fetch.sh > /dev/null || (git fetch --unshallow fork $DOMAIN && git fetch upstream master)
-    git checkout -b $DOMAIN fork/$DOMAIN
+    git checkout -f -b $DOMAIN fork/$DOMAIN
     git show fork/$DOMAIN:test/fetch.sh > /dev/null || git rebase upstream/master
 }
-git fetch --depth=50 fork $DOMAIN && checkoutBranch || (git fetch --depth=50 upstream master && git checkout -b $DOMAIN upstream/master)
+git fetch --depth=50 fork $DOMAIN && checkoutBranch || (git fetch --depth=50 upstream master && git checkout -f -b $DOMAIN upstream/master)
 wget https://github.com/github/hub/releases/download/v2.2.8/hub-linux-amd64-2.2.8.tgz -O - | tar xz --strip=1 -C ~ hub-linux-amd64-2.2.8
-chmod +x ~/workspace/Sublist3r/sublist3r.py ~/workspace/*.sh
 
-cd src/chrome/content/rules
-FILE=$(grep "<target host=\"$DOMAIN\"" -l *.xml) || FILE=$DOMAIN.xml
-~/workspace/generate.sh $DOMAIN "$FILE" || exit 1
+FILE=$(grep -r "<target host=\"$DOMAIN\"" -l src/chrome/content/rules) || FILE=src/chrome/content/rules/$DOMAIN.xml
+mv ~/$DOMAIN.xml "$FILE"
+sed "s&<ruleset name=\"European Union\">&<ruleset name=\"$DOMAIN\">&" -i "$FILE"
 if [ $(xmllint --xpath 'count(//target)' "$FILE") -eq 0 ]; then
   exit 1
 fi
