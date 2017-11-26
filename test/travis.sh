@@ -1,3 +1,4 @@
+set -x
 export PATH=~/bin:$PATH
 USER=$(curl -H "Authorization: token $GITHUB_TOKEN" 'https://api.github.com/user')
 #GITHUB_NAME=$(echo $USER | jq -r '.login')
